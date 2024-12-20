@@ -9,12 +9,3 @@ export const PrivilegeNames = {
 } as const;
 export type PrivilegeNames =
     (typeof PrivilegeNames)[keyof typeof PrivilegeNames];
-    
-export type QueryRequestParams = {
-	startDate?: string
-	endDate?: string
-	senderId?: string[]
-	receiverId?: string[]
-	page?: number
-	pageSize?: number
-}
