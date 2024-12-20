@@ -1,7 +1,7 @@
 {
-  "name": "cnp-common-types-library",
-  "version": "1.0.0",
-  "description": "",
+  "name": "@pch/pch-cnp-common-types-lib",
+  "version": "0.1.0",
+  "description": "CNP Common Types Library",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": ["dist"],
