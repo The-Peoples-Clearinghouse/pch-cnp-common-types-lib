@@ -34,9 +34,9 @@ jobs:
 
     - name: Configure NPM for Artifact Registry
       run: |
-        echo "//us-central1-npm.pkg.dev/pch-main/pch-docker-private/:_authToken=$(gcloud auth print-access-token)" > ~/.npmrc
-        echo "registry=https://us-central1-npm.pkg.dev/pch-main/pch-docker-private/" >> ~/.npmrc
-        echo "@pch-private:registry=https://us-central1-npm.pkg.dev/pch-main/pch-docker-private/" >> ~/.npmrc
+        echo "//us-central1-npm.pkg.dev/pch-main/pch-npm-private/:_authToken=$(gcloud auth print-access-token)" > ~/.npmrc
+        echo "registry=https://us-central1-npm.pkg.dev/pch-main/pch-npm-private/" >> ~/.npmrc
+        echo "@pch-private:registry=https://us-central1-npm.pkg.dev/pch-main/pch-npm-private/" >> ~/.npmrc
 
     - name: Install dependencies
       run: npm install
@@ -46,4 +46,4 @@ jobs:
 
     - name: Publish to Artifact Registry
       run: |
-        npm publish --registry=https://us-central1-npm.pkg.dev/pch-main/pch-docker-private/ --access=public
+        npm publish --registry=https://us-central1-npm.pkg.dev/pch-main/pch-npm-private/ --access=public
