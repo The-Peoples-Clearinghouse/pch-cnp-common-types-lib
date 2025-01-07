@@ -14,7 +14,8 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
       with:
-        fetch-depth: 0 
+        fetch-depth: 0
+        fetch-tags: true
 
     - name: Fetch all tags
       run: |
@@ -23,7 +24,7 @@ jobs:
     - name: Get Latest Tag
       id: get_new_tag
       run: |
-        LATEST_TAG=$(git describe --tags `git rev-list --tags --max-count=1`)
+        LATEST_TAG=$(git tag --sort=-creatordate | head -n 1)
         echo "LATEST_TAG=${LATEST_TAG}"
         echo "LATEST_TAG=${LATEST_TAG}" >> $GITHUB_ENV
 
@@ -42,13 +43,15 @@ jobs:
     - name: Install dependencies
       run: npm install
 
-    - name: Set Package Version to Match Tag
+    - name: Bump package version to latest tag
       run: |
         npm version ${LATEST_TAG} --no-git-tag-version
 
     - name: Validate Package Version
-      run: cat package.json | grep version
+      run: |
+        cat package.json | grep version
 
     - name: Publish to Artifact Registry
       run: |
-#        npm publish --registry=https://us-central1-npm.pkg.dev/pch-main/pch-npm-private/ --access=public
+        npm publish --registry=https://us-central1-npm.pkg.dev/pch-main/pch-npm-private/ --access=public
+
