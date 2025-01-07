@@ -13,13 +13,19 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
+      with:
+        fetch-depth: 0 
 
-    - name: Generate New Tag
+    - name: Fetch all tags
+      run: |
+        git fetch --tags --force
+
+    - name: Get Latest Tag
       id: get_new_tag
       run: |
-        git fetch --tags
-        LATEST_TAG=$(git tag --sort=-creatordate | head -n 1)
-        echo "NEW_TAG=${NEW_TAG}" >> $GITHUB_OUTPUT
+        LATEST_TAG=$(git describe --tags `git rev-list --tags --max-count=1`)
+        echo "LATEST_TAG=${LATEST_TAG}"
+        echo "LATEST_TAG=${LATEST_TAG}" >> $GITHUB_ENV
 
     - name: Authenticate to Google Cloud
       uses: google-github-actions/auth@v2
@@ -36,10 +42,13 @@ jobs:
     - name: Install dependencies
       run: npm install
 
-    - name: Bump package version
-      run: npm version patch --no-git-tag-version
+    - name: Set Package Version to Match Tag
+      run: |
+        npm version ${LATEST_TAG} --no-git-tag-version
+
+    - name: Validate Package Version
+      run: cat package.json | grep version
 
     - name: Publish to Artifact Registry
       run: |
-        npm publish --registry=https://us-central1-npm.pkg.dev/pch-main/pch-npm-private/ --access=public
-
+#        npm publish --registry=https://us-central1-npm.pkg.dev/pch-main/pch-npm-private/ --access=public
