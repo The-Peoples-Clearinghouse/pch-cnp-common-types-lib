@@ -1,1 +1,2 @@
-export * from './common-types';
+export * from './authorization-types';
+export * from './api-types';
