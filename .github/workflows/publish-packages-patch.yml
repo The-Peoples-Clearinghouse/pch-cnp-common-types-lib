@@ -35,12 +35,24 @@ jobs:
       - name: Fetch all tags
         run: git fetch --tags --force
 
-      - name: Get Latest Tag
-        id: get_new_tag
+      - name: Get Latest Tag and increment version
         run: |
           LATEST_TAG=$(git tag --sort=-creatordate | head -n 1)
-          echo "LATEST_TAG=${LATEST_TAG}"
-          echo "LATEST_TAG=${LATEST_TAG}" >> $GITHUB_ENV
+          if [[ -z "$LATEST_TAG" ]]; then
+            LATEST_TAG="v0.1.0"
+          fi
+          echo "Última etiqueta: $LATEST_TAG"
+
+          VERSION="${LATEST_TAG##*_v}"
+          MAJOR=$(echo "$VERSION" | cut -d. -f1)
+          MINOR=$(echo "$VERSION" | cut -d. -f2)
+          PATCH=$(echo "$VERSION" | cut -d. -f3)
+
+          NEW_PATCH=$((PATCH + 1))
+          NEW_TAG="${MAJOR}.${MINOR}.${NEW_PATCH}"
+          echo "Nueva versión: $NEW_TAG"
+
+          echo "NEW_TAG=${NEW_TAG}" >> $GITHUB_ENV
 
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v2
@@ -63,7 +75,7 @@ jobs:
       # Actualizar la versión del paquete
       - name: Bump package version to latest tag
         run: |
-          npm version ${LATEST_TAG} --no-git-tag-version
+          npm version ${NEW_TAG} --no-git-tag-version
 
       - name: Publish Package to Artifact Registry
         run: |
