@@ -1,9 +1,9 @@
 name: Publish to Artifact Registry
 
 on:
-    push:
-        tags:
-            - '*'
+  push:
+    tags:
+      - '*'
 
 jobs:
   publish:
@@ -33,6 +33,7 @@ jobs:
       with:
         credentials_json: ${{ secrets.GCP_JSON_AUTH }}
 
+    # Configurar NPM para Artifact Registry
     - name: Configure NPM for Artifact Registry
       run: |
         TOKEN=$(gcloud auth print-access-token)
@@ -40,18 +41,19 @@ jobs:
         echo "@pch-private:registry=https://us-central1-npm.pkg.dev/pch-main/pch-npm-private/" >> ~/.npmrc
         echo "registry=https://registry.npmjs.org/" >> ~/.npmrc
 
+    # Instalar dependencias
     - name: Install dependencies
       run: npm install
 
+    # Compilar el paquete
+    - name: Build Package
+      run: npm run build
+
+    # Actualizar la versión del paquete
     - name: Bump package version to latest tag
       run: |
         npm version ${LATEST_TAG} --no-git-tag-version
 
-    - name: Validate Package Version
+    - name: Publish Artifact Registry
       run: |
-        cat package.json | grep version
-
-    - name: Publish to Artifact Registry
-      run: |
-        npm publish --registry=https://us-central1-npm.pkg.dev/pch-main/pch-npm-private/ --access=public
-
+        npm publish --registry=https://us-central1-npm.pkg.dev/pch-main/pch-npm-private/
