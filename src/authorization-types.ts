@@ -1,4 +1,4 @@
-export const PrivilegeNames = {
+export const CnpPrivilegeNames = {
     READ_DASHBOARD: 'READ_DASHBOARD',
     READ_REMITANCES: 'READ_REMITANCES',
     READ_RECIPIENTS: 'READ_RECIPIENTS',
@@ -7,5 +7,5 @@ export const PrivilegeNames = {
     READ_CONCILIATION_REMITTANCES_REPORT:
         'READ_CONCILIATION_REMITTANCES_REPORT',
 } as const;
-export type PrivilegeNames =
-    (typeof PrivilegeNames)[keyof typeof PrivilegeNames];
+export type CnpPrivilegeNames =
+    (typeof CnpPrivilegeNames)[keyof typeof CnpPrivilegeNames];

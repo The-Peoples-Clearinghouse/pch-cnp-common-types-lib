@@ -14,13 +14,23 @@ export type RemittancesResponse = {
     amlScore: number;
 };
 
-export type PaginationResponse = {
-    page: number;
-    pageSize: number;
-    total: number;
-    totalPages: number;
-    totalItems: number;
-};
+export type QueryResponse<T> = {
+	data: T
+	errors: {
+		error: string
+		description: string
+	}[]
+}
+
+export type PaginatedQueryResponse<T> = QueryResponse<T> & {
+	pagination: {
+		page: number
+		pageSize: number
+		total: number
+		totalPages: number
+		totalItems: number
+	}
+}
 
 export type RemittancesSummaryResponse = {
     remittancesTotalAmount: number;
