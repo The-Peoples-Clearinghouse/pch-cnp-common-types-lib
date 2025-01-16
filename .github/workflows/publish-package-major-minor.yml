@@ -27,6 +27,15 @@ jobs:
         LATEST_TAG=$(git tag --sort=-creatordate | head -n 1)
         echo "LATEST_TAG=${LATEST_TAG}"
         echo "LATEST_TAG=${LATEST_TAG}" >> $GITHUB_ENV
+    
+    - name: Validate Major/Minor Tag
+      id: validate_tag
+      run: |
+        TAG="${{ env.LATEST_TAG }}"
+        if [[ ! "$TAG" =~ ^[0-9]+\.[0-9]+\.0$ ]]; then
+          echo "Invalid tag format. Expected format is X.Y.0 (e.g., 1.10.0)."
+          exit 1
+        fi
 
     - name: Authenticate to Google Cloud
       uses: google-github-actions/auth@v2
@@ -52,7 +61,7 @@ jobs:
     # Actualizar la versión del paquete
     - name: Bump package version to latest tag
       run: |
-        npm version ${LATEST_TAG} --no-git-tag-version
+        npm version ${TAG} --no-git-tag-version
 
     - name: Publish Artifact Registry
       run: |
