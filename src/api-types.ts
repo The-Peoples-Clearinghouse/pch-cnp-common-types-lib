@@ -136,11 +136,11 @@ export type FeeDefinition = {
     active: boolean;
     transferType: TransferType;
     feeType: FeeType;
-    calculationType: CalculationType; // calculated types applies ONLY to 'CNP' or 'SWITCH' FeeType
+    calculationType: CalculationType;
     feesCurrency: string | null;
-    fixedAmount: number | null; // needs to be null if calculationType is dynamic
-    senderFeePercentage: number | null; //goes from inclusive 0 to 100 exclusive
-    totalTransferAmountPercentage: number | null; //goes from inclusive 0 to 100 exclusive
+    fixedAmount: number | null;
+    senderFeePercentage: number | null;
+    totalTransferAmountPercentage: number | null;
     startDate: number;
     endDate: number;
 };
