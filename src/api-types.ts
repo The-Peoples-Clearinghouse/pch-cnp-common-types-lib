@@ -131,7 +131,7 @@ export const CalculationType = {
 export type CalculationType = keyof typeof CalculationType;
 
 export type FeeDefinition = {
-    id: string;
+    _id?: string;
     financialEntityId: string;
     active: boolean;
     transferType: TransferType;
