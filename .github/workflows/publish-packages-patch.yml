@@ -67,7 +67,8 @@ jobs:
 
       - name: Build Package
         run: npm run build
-
+      - name: Verificar estado de Git
+        run: git status
       - name: Bump package version to latest tag
         run: |
           npm version ${NEW_TAG} 
