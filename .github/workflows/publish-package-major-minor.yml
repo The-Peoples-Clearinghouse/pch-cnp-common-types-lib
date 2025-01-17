@@ -41,15 +41,12 @@ jobs:
         echo "@pch-private:registry=https://us-central1-npm.pkg.dev/pch-main/pch-npm-private/" >> ~/.npmrc
         echo "registry=https://registry.npmjs.org/" >> ~/.npmrc
 
-    # Instalar dependencias
     - name: Install dependencies
       run: npm install
 
-    # Compilar el paquete
     - name: Build Package
       run: npm run build
 
-    # Actualizar la versión del paquete
     - name: Bump package version to latest tag
       run: |
         npm version ${LATEST_TAG} --no-git-tag-version

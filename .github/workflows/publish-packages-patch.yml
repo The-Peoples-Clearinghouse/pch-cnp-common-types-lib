@@ -38,9 +38,7 @@ jobs:
       - name: Get Latest Tag and increment version
         run: |
           LATEST_TAG=$(git tag --sort=-creatordate | head -n 1)
-          if [[ -z "$LATEST_TAG" ]]; then
-            LATEST_TAG="0.1.0"
-          fi
+          
           echo "Última etiqueta: $LATEST_TAG"
           MAJOR=$(echo "$LATEST_TAG" | cut -d. -f1)
           MINOR=$(echo "$LATEST_TAG" | cut -d. -f2)
@@ -70,11 +68,26 @@ jobs:
       - name: Build Package
         run: npm run build
 
-      # Actualizar la versión del paquete
       - name: Bump package version to latest tag
         run: |
-          npm version ${NEW_TAG} --no-git-tag-version
+          npm version ${NEW_TAG} 
+          git push origin main --tags
+
 
       - name: Publish Package to Artifact Registry
         run: |
           npm publish --registry=https://us-central1-npm.pkg.dev/pch-main/pch-npm-private/
+      
+      - name: Create GitHub Release
+        run: |
+          curl -X POST \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/repos/${{ github.repository }}/releases \
+            -d '{
+              "tag_name": "'${NEW_TAG}'",
+              "name": "Release '${NEW_TAG}'",
+              "body": "Automated release for version '${NEW_TAG}'",
+              "draft": false,
+              "prerelease": false
+            }'
