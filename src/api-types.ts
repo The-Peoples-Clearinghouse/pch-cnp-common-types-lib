@@ -145,3 +145,50 @@ export type FeeDefinition = {
     endDate: number;
 };
 
+//Reports
+export type TransferFiltersOrder = {
+    id: string;
+    senderInstitutionId: string;
+    completedAtTs: number | null;
+    senderFullName: string;
+    recipientFullName: string;
+    amountReceived: number;
+    fxRate: number;
+    amountSent: number;
+    recipientInstitutionId: string;
+};
+
+export type RecipientInstitutionRemittances = {
+    totalAmountOfRemittances: number;
+    totalNumberOfRemittances: number;
+    recipientInstitutionId: string;
+};
+
+export type SenderInstitutionRemittances = {
+    totalAmountOfRemittances: number;
+    totalNumberOfRemittances: number;
+    senderInstitutionId: string;
+};
+
+export type RemittancesSummaryByInstitutionsResponse = {
+    senderInstitutions: SenderInstitutionRemittances[];
+    recipientInstitutions: RecipientInstitutionRemittances[];
+};
+
+export type RemittanceData = {
+    rafikiPaymentId: string;
+    recipientFullName: string;
+    senderFullName: string;
+    recipientInstitutionId: string;
+    amountReceived: number;
+    completedAtTs: number;
+};
+
+export type RemittancesAndTotalReceivedAmount = {
+    remittances: RemittanceData[];
+    totalReceivedAmount: number;
+};
+
+export type RemittancesByInstitutionsResponse = {
+    [key: string]: RemittancesAndTotalReceivedAmount;
+};
